@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>Geolocation</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        left:25%;
+        height: 50%;
+        width:50%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: rgb(255,69,0);
+      }
+
+      table {
+      font-family: 'Raleway', sans-serif;
+      border-collapse: collapse;
+      background-color: #fff;
+      }
+
+      td{
+        border: 1px solid #000;
+        text-align: center;
+        padding: 5px 5px 5px 5px;
+      }
+      td:nth-child(1) {
+       font-weight: bold;
+      }
+
+
+      
+    </style>
+  </head>
+  <body>
+    <div id="ta" style="margin-top:10%;"></div><br><br>
+    <div id="map"></div>
+    <br><br>
+    <script>
+
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
+      
+      var map, infoWindow;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 0, lng: 0},
+          zoom: 10
+        });
+        infoWindow = new google.maps.InfoWindow;
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+                var lati=position.coords.latitude; 
+    var longi=position.coords.longitude;
+      $.post('weathe.php',{a:lati,b:longi},function(feedback){
+        $('#ta').html(feedback);
+      });
+         
+      
+            var pos = {
+              lat: lati,
+              lng: longi
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Found You!');
+
+            infoWindow.open(map);
+            map.setCenter(pos);
+            $('#map').css({'border':'3px dotted #000'});
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+       
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+    </script>
+        <script async defer
+    src='https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY'></script>
+  <div style="width:100%;background-color: #fff;word-wrap: break-word;text-align: center;bottom:0%;position: fixed;">
+<a style="color:#505050" href="https://www.linkedin.com/in/vinayak-sinha-743125110/" title="Linkedin" target=_blank> <img border="0" alt="Linkedin" src="linkedin.png" width="20px" height="20px"></a> &nbsp <a style="color:#505050" href="https://www.github.com/Vinnu1" title="GitHub" target=_blank> <img border="0" alt="GitHub" src="g.png" width="20px" height="20px"></a>
+</div>
+</body>
+</html>
+
